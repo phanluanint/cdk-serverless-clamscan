@@ -58,4 +58,3 @@ junit.xml
 tsconfig.json
 !/API.md
 !/.projenrc.js
-.npmrc
