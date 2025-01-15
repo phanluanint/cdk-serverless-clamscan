@@ -1,9 +1,9 @@
 {
-  "name": "cdk-serverless-clamscan",
+  "name": "@phanluanint/cdk-serverless-clamscan",
   "description": "Serverless architecture to virus scan objects in Amazon S3.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/awslabs/cdk-serverless-clamscan"
+    "url": "https://github.com/phanluanint/cdk-serverless-clamscan"
   },
   "scripts": {
     "build": "npx projen build",
@@ -87,9 +87,9 @@
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "jest": {
     "coverageProvider": "v8",
     "testMatch": [
