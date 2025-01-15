@@ -1009,8 +1009,6 @@ test('should handle FilteredClamscanBucket correctly', () => {
   const filteredBucket: ServerlessClamscanBucket = { bucket, keyFilters };
   new ServerlessClamscan(stack, 'default', { buckets: [filteredBucket] });
 
-  const template = Template.fromStack(stack);
-  console.log(JSON.stringify(template.toJSON(), null, 2));
 // Check for the S3 bucket notification configuration
 // template.hasResourceProperties('AWS::S3::Bucket', {
 //   NotificationConfiguration: {
