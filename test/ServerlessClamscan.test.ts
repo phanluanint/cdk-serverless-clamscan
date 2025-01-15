@@ -11,7 +11,6 @@ import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { ServerlessClamscan, ServerlessClamscanBucket } from '../src';
 import '@aws-cdk/assert/jest';
 
-
 test('expect default EventBridge Lambda destination and Event Rules for onSuccess and SQS Destination for onDelete', () => {
   const stack = new Stack();
   new ServerlessClamscan(stack, 'default', {});
@@ -288,64 +287,64 @@ test('check bucket triggers and policies for source buckets ', () => {
   });
 });
 
-// test('Check bucket triggers and policies for imported bucket', () => {
-//   const stack = new Stack();
-//   const importedBucket = Bucket.fromBucketName(stack, 'ImportedBucket', 'imported-bucket-name');
-//   new ServerlessClamscan(stack, 'default', {
-//     buckets: [importedBucket],
-//     acceptResponsibilityForUsingImportedBucket: true,
-//   });
+test('Check bucket triggers and policies for imported bucket', () => {
+  const stack = new Stack();
+  const importedBucket = Bucket.fromBucketName(stack, 'ImportedBucket', 'imported-bucket-name');
+  new ServerlessClamscan(stack, 'default', {
+    buckets: [importedBucket],
+    acceptResponsibilityForUsingImportedBucket: true,
+  });
 
-//   // policy for the source bucket shouldn't be added
-//   expect(stack).toCountResources('AWS::S3::BucketPolicy', 2);
+  // policy for the source bucket shouldn't be added
+  expect(stack).toCountResources('AWS::S3::BucketPolicy', 2);
 
-//   expect(stack).toHaveResource('AWS::Lambda::Permission', {
-//     Action: 'lambda:InvokeFunction',
-//     FunctionName: {
-//       'Fn::GetAtt': [
-//         stringLike('*ServerlessClamscan*'),
-//         'Arn',
-//       ],
-//     },
-//     Principal: 's3.amazonaws.com',
-//     SourceAccount: {
-//       Ref: 'AWS::AccountId',
-//     },
-//     SourceArn: {
-//       'Fn::Join': [
-//         '',
-//         [
-//           'arn:',
-//           {
-//             Ref: 'AWS::Partition',
-//           },
-//           ':s3:::imported-bucket-name',
-//         ],
-//       ],
-//     },
-//   });
-// });
+  expect(stack).toHaveResource('AWS::Lambda::Permission', {
+    Action: 'lambda:InvokeFunction',
+    FunctionName: {
+      'Fn::GetAtt': [
+        stringLike('*ServerlessClamscan*'),
+        'Arn',
+      ],
+    },
+    Principal: 's3.amazonaws.com',
+    SourceAccount: {
+      Ref: 'AWS::AccountId',
+    },
+    SourceArn: {
+      'Fn::Join': [
+        '',
+        [
+          'arn:',
+          {
+            Ref: 'AWS::Partition',
+          },
+          ':s3:::imported-bucket-name',
+        ],
+      ],
+    },
+  });
+});
 
-// test('Check error is raised when imported bucket is used without accepting responsibility', () => {
-//   const stack = new Stack();
-//   const importedBucket = Bucket.fromBucketName(stack, 'ImportedBucket', 'imported-bucket-name');
+test('Check error is raised when imported bucket is used without accepting responsibility', () => {
+  const stack = new Stack();
+  const importedBucket = Bucket.fromBucketName(stack, 'ImportedBucket', 'imported-bucket-name');
 
-//   const errorMessage = 'acceptResponsibilityForUsingImportedBucket must be set when adding an imported bucket. When using imported buckets the user is responsible for adding the required policy statement to the bucket policy: `getPolicyStatementForBucket()` can be used to retrieve the policy statement required by the solution';
+  const errorMessage = 'acceptResponsibilityForUsingImportedBucket must be set when adding an imported bucket. When using imported buckets the user is responsible for adding the required policy statement to the bucket policy: `getPolicyStatementForBucket()` can be used to retrieve the policy statement required by the solution';
 
-//   const f = () => {
-//     new ServerlessClamscan(stack, 'default', {
-//       buckets: [importedBucket],
-//     });
-//   };
+  const f = () => {
+    new ServerlessClamscan(stack, 'default', {
+      buckets: [importedBucket],
+    });
+  };
 
-//   const g = () => {
-//     const sc = new ServerlessClamscan(stack, 'default_2', {});
-//     sc.addSourceBucket(importedBucket);
-//   };
+  const g = () => {
+    const sc = new ServerlessClamscan(stack, 'default_2', {});
+    sc.addSourceBucket(importedBucket);
+  };
 
-//   expect(f).toThrow(errorMessage);
-//   expect(g).toThrow(errorMessage);
-// });
+  expect(f).toThrow(errorMessage);
+  expect(g).toThrow(errorMessage);
+});
 
 test('check Virus Definition buckets policy security and S3 Gateway endpoint policy', () => {
   const stack = new Stack();
@@ -1007,23 +1006,7 @@ test('should handle FilteredClamscanBucket correctly', () => {
   const keyFilters: NotificationKeyFilter[] = [{ prefix: 'sample/' }];
   const filteredBucket: ServerlessClamscanBucket = { bucket, keyFilters };
   new ServerlessClamscan(stack, 'default', { buckets: [filteredBucket] });
-  // Check for the S3 bucket notification configuration
-  // template.hasResourceProperties('AWS::S3::Bucket', {
-  //   NotificationConfiguration: {
-  //     LambdaConfigurations: [
-  //       {
-  //         Event: 's3:ObjectCreated:*',
-  //         Filter: {
-  //           S3Key: {
-  //             Rules: [
-  //               { Name: 'prefix', Value: 'sample/' },
-  //             ],
-  //           },
-  //         },
-  //       },
-  //     ],
-  //   },
-  // });
+
   expect(stack).toHaveResource('AWS::Lambda::Permission', {
     Action: 'lambda:InvokeFunction',
     FunctionName: {
