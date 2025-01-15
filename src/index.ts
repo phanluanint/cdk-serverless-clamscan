@@ -55,15 +55,15 @@ export interface ServerlessClamscanLoggingProps {
 /**
  * Interface for bucket with notification filters. Used to configure a bucket with key filters.
  */
-export interface FilteredClamscanBucket {
-  bucket: IBucket;
-  keyFilters: NotificationKeyFilter[];
+export interface IFilteredClamscanBucket {
+  readonly bucket: IBucket;
+  readonly keyFilters: NotificationKeyFilter[];
 }
 
 /**
  * Union type. Can be use as AWS Bucket or Bucket with key filters.
  */
-export type ServerlessClamscanBucket = IBucket | FilteredClamscanBucket;
+export type ServerlessClamscanBucket = IBucket | IFilteredClamscanBucket;
 /**
  * Interface for creating a ServerlessClamscan.
  */
